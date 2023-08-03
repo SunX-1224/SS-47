@@ -1,0 +1,149 @@
+@fetch
+    *pc ~mo
+    ~mo ii rbi ovr
+@mov %r1 %r2
+    *pc ~mo
+    ~mo rbi ovr
+    %ro %ri
+@mvi %r imm8
+    *pc ~mo
+    ~mo %ri ovr
+@lxi %r imm16
+    *pc ~mo
+    ~mo ^h %ri ovr
+    *pc ~mo
+    ~mo %ri ovr
+@ldr %r [imm16]
+    *pc ~mo
+    ~mo wz ^h ovr
+    *pc ~mo
+    ~mo wz ovr
+    *wz ~mo
+    ~mo %ri
+@str %r [imm16]
+    *pc ~mo
+    ~mo wz ^h ovr
+    *pc ~mo
+    ~mo wz ovr
+    *wz %ro we
+@add %r1 %r2
+    %ro wz ^h *pc
+    ~mo rbi ovr
+    %ro wz
+    alo %ri
+@adc %r1 %r2
+    %ro wz ^h *pc
+    ~mo rbi ovr
+    %ro wz
+    alo ce %ri
+@adi %r imm8
+    %ro wz ^h *pc
+    ~mo wz ovr
+    alo %ri
+@aci %r imm8
+    %ro wz ^h *pc
+    ~mo wz ovr
+    alo %ri ce
+@sub %r1 %r2
+    %ro wz ^h *pc
+    ~mo rbi ovr
+    %ro wz
+    nx no alo %ri
+@sbb %r1 %r2
+    %ro wz ^h *pc
+    ~mo rbi ovr
+    %ro wz
+    nx no alo ce %ri
+@sui %r1 imm8
+    %ro wz ^h *pc
+    ~mo wz ovr
+    nx no alo %ri
+@sbi %r1 imm8
+    %ro wz ^h *pc
+    ~mo wz ovr
+    nx no alo ce %ri
+@inc %r
+    %ro wz ^h
+    nx zy ny no alo %ri
+@dcr %r
+    %ro wz ^h
+    zy ny alo %ri
+@cmp %r1 %r2
+    %ro wz ^h *pc
+    ~mo rbi ovr
+    %ro wz
+    nx no alo
+@not %r
+    %ro wz ^h
+    nx zy alo %ri
+@and %r1 %r2
+    %ro wz ^h *pc
+    ~mo rbi ovr
+    %ro wz
+    f alo %ri
+@or %r1 %r2
+    %ro wz ^h *pc
+    ~mo rbi ovr
+    %ro wz
+    nx ny f no alo %ri
+@jmp imm16
+    *pc ~mo
+    ~mo wz ^h ovr
+    *pc ~mo
+    ~mo wz ovr
+    ~wz ovr
+@push %r
+    p/s i/d ovr
+    *sp %ro we
+@pop %r
+    *sp ~mo
+    ~mo %ri
+    p/s ovr
+@call imm16
+    *pc ~mo
+    ~mo wz ^h ovr
+    *pc ~mo p/s i/d ovr
+    ~mo wz ovr
+    *sp pc->r we p/s i/d ovr
+    *sp pc->r ^h we ~wz ovr
+@ret
+    *sp ~mo
+    ~mo wz ^h p/s ovr
+    *sp ~mo
+    ~mo wz p/s ovr
+    ~wz ovr
+@jc imm16
+    *pc ~mo
+    ~mo wz ^h ovr
+    *pc ~mo
+    ~mo wz ovr
+    ~wz
+@jz imm16
+    *pc ~mo
+    ~mo wz ^h ovr
+    *pc ~mo
+    ~mo wz ovr
+    ~wz
+@jn imm16
+    *pc ~mo
+    ~mo wz ^h ovr
+    *pc ~mo
+    ~mo wz ovr
+    ~wz
+@inb %r [PORT]
+    *pc ~mo
+    ~mo rbi ovr
+    rd %ri
+@out [PORT] %r
+    *pc ~mo
+    ~mo rbi ovr
+    %ro wr
+@MBS $imm8
+    *pc ~mo
+    ~mo mbi ovr
+@SST $imm16
+    *pc ~mo
+    ~mo wz ^h ovr
+    *pc ~mo
+    ~mo wz ovr
+    ~wz p/s ovr

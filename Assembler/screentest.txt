@@ -1,0 +1,46 @@
+@define xport 0001
+@define yport 0010
+@define clear 1000
+@define width 62
+@define height 30
+
+SST 0xbfff
+MBS 3
+jmp .start
+
+.start:
+//initialize values
+    mvi d 12        //x
+    mvi e 24        //y
+    mvi a 0x02      //1 for cmp
+    mvi h 0x2       //dx
+    mvi l 0x1       //dy
+    mvi b width     //width for x cmp
+    mvi c height    //height for y cmp
+
+.loop:
+    out xport d
+    out clear d
+    out yport e
+//Update value
+    cmp d a
+    jz $+2
+    jmp $+2
+    mvi h 0x2
+    cmp d b
+    jz $+2
+    jmp $+2
+    mvi h 0xfe
+
+    cmp e a
+    jz $+2
+    jmp $+2
+    mvi l 0x1
+    cmp e c
+    jz $+2
+    jmp $+2
+    mvi l 0xff
+
+    add d h
+    add e l
+    jmp .loop

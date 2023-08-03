@@ -1,0 +1,193 @@
+// TODO:
+// >Console string message
+// >get (2dgt) integer input
+// >check entered number with generated random number
+// >Console less than or greater than message
+// >Total guesses : 5
+// >if right answer : console message :: Congrats
+// >if wrong answer : console message :: Game Lost
+
+@define port 0001
+@define rngen 0010
+@define input_bank 0x4000
+@define enter 10
+
+SST 0xbfff
+MBS 0x3
+jmp .start
+
+guess_message:
+    push c
+    mvi c 'G'
+    out port c
+    mvi c 'u'
+    out port c
+    mvi c 'e'
+    out port c
+    mvi c 's'
+    out port c
+    mvi c 's'
+    out port c
+    mvi c 32
+    out port c
+    mvi c 'N'
+    out port c
+    mvi c 'u'
+    out port c
+    mvi c 'm'
+    out port c
+    mvi c 58
+    out port c
+    pop c
+    ret
+
+greater_than:
+    push c
+    mvi c 'l'
+    out port c
+    mvi c 'e'
+    out port c
+    mvi c 's'
+    out port c
+    mvi c 's'
+    out port c
+    mvi c 58
+    out port c
+    pop c
+    ret
+
+less_than:
+    push c
+    mvi c 'g'
+    out port c
+    mvi c 'r'
+    out port c
+    mvi c 'e'
+    out port c
+    mvi c 'a'
+    out port c
+    mvi c 't'
+    out port c
+    mvi c 'e'
+    out port c
+    mvi c 'r'
+    out port c
+    mvi c 58
+    out port c
+    pop c
+    ret
+
+lose_msg:
+    push c
+    mvi c 10
+    out port c
+    mvi c 'L'
+    out port c
+    mvi c 'o'
+    out port c
+    mvi c 's'
+    out port c
+    mvi c 'e'
+    out port c
+    mvi c 'r'
+    out port c
+    pop c
+    ret
+
+win_msg:
+    push c
+    mvi c 10
+    out port c
+    mvi c 'W'
+    out port c
+    mvi c 'i'
+    out port c
+    mvi c 'n'
+    out port c
+    mvi c 'n'
+    out port c
+    mvi c 'e'
+    out port c
+    mvi c 'r'
+    out port c
+    pop c
+    ret
+
+mul_a10:
+    push c
+    push d
+    mvi c 10
+    mov d a
+    dcr c
+    add a d
+    dcr c
+    jz $+2
+    jmp $-3
+    pop d
+    pop c
+    ret
+
+input:
+    push e
+    push c
+    mvi c 0
+    mvi e enter
+    inb m port
+    out port m
+    cmp m e
+    jz $+7
+    sui m 48
+    inc l
+    jc $+2
+    inc h
+    inc c
+    jmp $-9
+    mov m c
+    pop c
+    pop e
+    ret
+
+int_input:
+    push c
+    push a
+    lxi hl input_bank
+    call input
+    mov c m
+    lxi hl input_bank
+    dcr c
+    jz .local_exit
+    mov a m
+    call mul_a10
+    inc l
+    jc $+2
+    inc h
+    add m a
+    jmp $-8
+
+.local_exit:
+    pop a
+    pop c
+    ret
+
+.start:
+    mvi c 8
+    inb b rngen
+    out rngen b
+    call guess_message
+.guess:
+    dcr c
+    jn .loser
+    call int_input
+    cmp m b
+    jz .winner
+    jn $+3
+    call greater_than
+    jmp $+2
+    call less_than
+    jmp .guess
+.loser:
+    call lose_msg
+    jmp $
+.winner:
+    call win_msg
+    jmp $

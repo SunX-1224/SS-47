@@ -1,0 +1,148 @@
+@mov:
+	  ~mo *pc
+	  ~mo *hl rbi ovr
+	  %ro %ri *hl
+@mvi:
+	  ~mo *pc
+	  ~mo %ri *hl ovr
+@lxi:
+	  ~mo *pc
+	  ~mo %ri *hl ^h ovr
+	  ~mo *pc
+	  ~mo %ri *hl ovr
+@ldr:
+	  ~mo *pc
+	  ~mo wz *hl ^h ovr
+	  ~mo *pc
+	  ~mo wz *hl ovr
+	  ~mo *wz
+	  ~mo %ri *hl
+@str:
+	  ~mo *pc
+	  ~mo wz *hl ^h ovr
+	  ~mo *pc
+	  ~mo wz *hl ovr
+	  %ro *wz we
+@add:
+	  %ro wz *pc ^h
+	  ~mo *hl rbi ovr
+	  %ro wz *hl
+	  alo %ri *hl
+@adc:
+	  %ro wz *pc ^h
+	  ~mo *hl rbi ovr
+	  %ro wz *hl
+	 ce alo %ri *hl
+@adi:
+	  %ro wz *pc ^h
+	  ~mo wz *hl ovr
+	  alo %ri *hl
+@aci:
+	  %ro wz *pc ^h
+	  ~mo wz *hl ovr
+	 ce alo %ri *hl
+@sub:
+	  %ro wz *pc ^h
+	  ~mo *hl rbi ovr
+	  %ro wz *hl
+	 nx no alo %ri *hl
+@sbb:
+	  %ro wz *pc ^h
+	  ~mo *hl rbi ovr
+	  %ro wz *hl
+	 nx no ce alo %ri *hl
+@sui:
+	  %ro wz *pc ^h
+	  ~mo wz *hl ovr
+	 nx no alo %ri *hl
+@sbi:
+	  %ro wz *pc ^h
+	  ~mo wz *hl ovr
+	 nx no ce alo %ri *hl
+@inc:
+	  %ro wz *hl ^h
+	 nx zy ny no alo %ri *hl
+@dcr:
+	  %ro wz *hl ^h
+	 zy ny alo %ri *hl
+@cmp:
+	  %ro wz *pc ^h
+	  ~mo *hl rbi ovr
+	  %ro wz *hl
+	 nx no alo *hl
+@not:
+	  %ro wz *hl ^h
+	 nx zy alo %ri *hl
+@and:
+	  %ro wz *pc ^h
+	  ~mo *hl rbi ovr
+	  %ro wz *hl
+	 f alo %ri *hl
+@or:
+	  %ro wz *pc ^h
+	  ~mo *hl rbi ovr
+	  %ro wz *hl
+	 nx ny f no alo %ri *hl
+@jmp:
+	  ~mo *pc
+	  ~mo wz *hl ^h ovr
+	  ~mo *pc
+	  ~mo wz *hl ovr
+	  ~mo *hl ~wz ovr
+@push:
+	  ~mo *hl p/s i/d ovr
+	  %ro *sp we
+@pop:
+	  ~mo *sp
+	  ~mo %ri *hl
+	  ~mo *hl p/s ovr
+@call:
+	  ~mo *pc
+	  ~mo wz *hl ^h ovr
+	  ~mo *pc p/s i/d ovr
+	  ~mo wz *hl ovr
+	  ~mo *sp pc->r we p/s i/d ovr
+	  ~mo *sp ^h pc->r we ~wz ovr
+@ret:
+	  ~mo *sp
+	  ~mo wz *hl ^h p/s ovr
+	  ~mo *sp
+	  ~mo wz *hl p/s ovr
+	  ~mo *hl ~wz ovr
+@jc:
+	  ~mo *pc
+	  ~mo wz *hl ^h ovr
+	  ~mo *pc
+	  ~mo wz *hl ovr
+	  ~mo *hl ~wz
+@jz:
+	  ~mo *pc
+	  ~mo wz *hl ^h ovr
+	  ~mo *pc
+	  ~mo wz *hl ovr
+	  ~mo *hl ~wz
+@jn:
+	  ~mo *pc
+	  ~mo wz *hl ^h ovr
+	  ~mo *pc
+	  ~mo wz *hl ovr
+	  ~mo *hl ~wz
+@inb:
+	  ~mo *pc
+	  ~mo *hl rbi ovr
+	  rd %ri *hl
+@out:
+	  ~mo *pc
+	  ~mo *hl rbi ovr
+	  %ro *hl wr
+@MBS:
+	  ~mo *pc
+	  ~mo *hl mbi ovr
+@SST:
+	  ~mo *pc
+	  ~mo wz *hl ^h ovr
+	  ~mo *pc
+	  ~mo wz *hl ovr
+	  ~mo *hl p/s ~wz ovr
+
+Process finished with exit code 0

@@ -1,0 +1,53 @@
+@define port 0001
+@define spc 32
+
+SST 0xffff
+MBS 0x3
+jmp .start
+
+ext_dgt2:
+    lxi hl 0x4000
+    push b
+    push a
+    mvi c 0
+    mvi b 10
+    cmp a b
+    jn $+4
+    inc c
+    sub a b
+    jmp $-4
+    mov m c
+    inc l
+    mov m a
+    pop a
+    pop b
+    lxi hl 0x4000
+    ret
+
+fibonacci:
+    push b
+    add b a
+    pop a
+    ret
+
+.start:
+    mvi a 0  //a=0  b=1  : t = b  b = b+a  a = b
+    mvi b 1
+    mvi d 12
+    mvi e spc
+
+.loop:
+    call ext_dgt2       //display mechanism
+    adi m 48
+    out port m
+    inc l
+    adi m 48
+    out port m
+    out port e
+
+    call fibonacci      //calculation
+
+    dcr d               //count
+    jz $+2
+    jmp .loop
+    jmp $

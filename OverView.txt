@@ -1,0 +1,85 @@
+========== SS47-2 ===========
+
+Architecture : 8 bit Von-Neumann
+Addressable memory : 64kb
+
+========Memory Layout========
+    >> 16kB ROM
+    >> 16kB Banked Memory
+    >> 30kB GP RAM
+    >> 2kB STACK
+    >> 9 General Purpose Registers (3 pairable and Accumulator)
+    >> Program Counter 16b
+    >> Stack Pointer 16b
+    >> Memory Bank Register(3-255)
+    <<< 4MB total available memory with 64KB addressable and remaining banked memory >>>
+
+========Instructions========
+0x00 : mov  %r1 %r2         : %r1 = %r2
+0x01 : mvi  %r imm8         : %r = imm8
+0x02 : lxi  %rp imm16       : %rh = imm16(>8) %rl = imm16(>0)
+0x03 : ldr  %r imm16        : %r = [imm16]
+0x04 : str  %r imm16        : [imm16] = %r
+0x05 : add  %r1 %r2         : %r1 = %r1 + %r2
+0x06 : adc  %r1 %r2         : %r1 = %r1 + %r2 + c
+0x07 : adi  %r imm8         : %r =%r + $imm8
+0x08 : aci  %r imm8         : %r = %r + $imm8 + c
+0x09 : sub  %r1 %r2         : %r1 = %r1 - %r2
+0x0a : sbb  %r1 %r2         : %r1 = %r1 - %r2 - b
+0x0b : sui  %r imm8         : %r = %r - $imm8
+0x0c : sbi  %r imm8         : %r = 5r - $imm8 - b
+0x0d : inc  %r              : %r++
+0x0e : dcr  %r              : %r--
+0x0f : cmp  %r1 %r2         : %r1 - %r2 -> f
+0x10 : not  %r              : %r = ! %r
+0x11 : and  %r1 %r2         : %r1 = %r1 & %r2
+0x12 : or   %r1 %r2         : %r1 = %r1 | %r2
+0x13 : jmp  imm16           : pc = imm16
+0x14 : push %r              : [--SP] = %r
+0x15 : pop  %r              : %r = [SP++]
+0x16 : call imm16           : wz = imm16 => [--SP] = pcl => [--SP] = pch => pc = wz
+0x17 : ret                  : w = [SP++] => z = [SP++] => PCe ovr
+0x18 : jc   imm16           : if c == 1? PC = imm16 : NOP
+0x19 : jz   imm16           : if z == 1? PC = imm16 : NOP
+0x1a : jn   imm16           : if n == 1? PC = imm16 : NOP
+0x1b : inb  %r [PORT]       : %r = [PORT]
+0x1c : out  [PORT] %r       : [PORT] = %r
+0x1d : MBS  imm8            : mbr = $imm8
+0x1e : SST  imm16           : sp = $imm16
+#0x1f : ji  imm16           : if i == 1? PC = imm16 : NOP   //not implemented (reserved for interrupts)
+
+    ***Note : the syntax is case dependent
+
+========== Registers ===========
+Pairs code :^h|^l  001
+             A|M : 00   :: A:100  M:000
+             B|C : 01   :: B:101  C:001
+             D|E : 10   :: D:110  E:010
+             H|L : 11   :: H:111  L:011
+
+Register Pair should be indicated by the low-byte storing register in the pair.
+if specific register is to be accessed the 2lsb should indicate pair and 1msb
+should indicate if the register stores high byte or low byte in the pair. M
+indicates the memory location in RAM indicated by hl pair or immediate 16bits.
+
+========== Input/Output ==========
+Four ports are available for input and output purpose. These four pairs are indicated
+by 4msb in the location buffer. Output can be supplied through multiple ports but input
+is available through one port at a time whose priority is decoded inside the cpu, so it
+is recommended to select one port at a time for input and output purpose.
+
+========== Memory banking ==========
+Memory banking is available for 16kb memory of the RAM. Total 8 memories can be banked which
+makes the total available memory of 128kb of banked memory and and 48 kb reserved memory that
+makes total of 176kb memory.
+
+INS_SET = \
+    {
+    'mov' : '00000','mvi' : '00001','lxi' : '00010','ldr' : '00011','str' : '00100',
+    'add' : '00101','adc' : '00110','adi' : '00111','aci' : '01000','sub' : '01001',
+    'sbb' : '01010','sui' : '01011','sbi' : '01100','inc' : '01101','dcr' : '01110',
+    'cmp' : '01111','not' : '10000','and' : '10001','or'  : '10010','push': '10100',
+    'pop' : '10101','call': '10110','ret' : '10111','jc'  : '11000','jz'  : '11001',
+    'jn'  : '11010','inb' : '11011','out' : '11100','MBS' : '11101','SST' : '11110',
+    'jmp' : '10011'
+}

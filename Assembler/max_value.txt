@@ -1,0 +1,86 @@
+@define port 0001
+@define enter 10
+@define input_bank 0x4000
+@define array_len 5
+
+SST 0xffff
+MBS 0x3
+jmp .start
+
+mul_a10:
+    push c
+    push d
+    mvi c 10
+    mov d a
+    dcr c
+    add a d
+    dcr c
+    jz $+2
+    jmp $-3
+    pop d
+    pop c
+    ret
+
+input:
+    push e
+    push c
+    mvi c 0
+    mvi e enter
+    inb m port
+    out port m
+    cmp m e
+    jz $+7
+    sui m 48
+    inc l
+    jc $+2
+    inc h
+    inc c
+    jmp $-9
+    mov m c
+    pop c
+    pop e
+    ret
+
+int_input:
+    push c
+    push a
+    lxi hl input_bank
+    call input
+    mov c m
+    lxi hl input_bank
+    dcr c
+    jz .local_exit
+    mov a m
+    call mul_a10
+    inc l
+    jc $+2
+    inc h
+    add m a
+    jmp $-8
+
+.local_exit:
+    pop a
+    pop c
+    ret
+
+.start:
+    mvi c array_len
+    dcr c
+    jn $+4
+    call int_input
+    push m              //push integer input to stack
+    jmp $-4
+
+    mvi c array_len     //max value finding algorithm
+    dcr c
+    pop a
+    dcr c
+    jn $+7
+    pop b
+    cmp a b
+    jn $+2
+    jmp $-5
+    mov a b
+    jmp $-7
+    out 0010 a
+    jmp $

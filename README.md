@@ -1,8 +1,10 @@
 # ========== SS47-2 ===========
 
-*Architecture : 8 bit Von-Neumann
-*Addressable memory : 64KB
-*Total available memory : 4MB
+* Architecture : 8 bit Von-Neumann
+
+* Addressable memory : 64KB
+
+* Total available memory : 4MB
 
 **=======Memory Layout========**
   * 16KB ROM

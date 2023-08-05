@@ -16,6 +16,7 @@ Total available memory : 4MB
   * 4MB total available memory with 64KB addressable and remaining banked memory *
 
 **========Instructions========**
+
     0x00 : mov  %r1 %r2         : %r1 = %r2
     0x01 : mvi  %r imm8         : %r = imm8
     0x02 : lxi  %rp imm16       : %rh = imm16(>8) %rl = imm16(>0)
@@ -52,6 +53,7 @@ Total available memory : 4MB
   ***Note : the syntax is case dependent***
 
 **========== Registers ===========**
+
 Pairs code :^h|^l  001
              A|M : 00   :: A:100  M:000
              B|C : 01   :: B:101  C:001
@@ -63,7 +65,9 @@ Register Pair should be indicated by the low-byte storing register in the pair. 
   ***Note : Pairs code is provided just in case the user wants to translate the op-code to machine code by hand.***
 
 **========== Input/Output ==========**
+
 Four specific ports are available for input and output purpose. Otherwise any number of ports can be used in certain memory address block by using interfacing chip (for this method instead of inb/out instruction, memory instructions ldr/str has to be used). These four pairs are indicated by 4msb in the location buffer. Output can be supplied through multiple ports but input is available through one port at a time whose priority is decoded inside the cpu, so it is recommended to select one port at a time for input and output purpose.
   
 **========== Memory banking ==========**
+
 Memory banking is available for 16KB memory of the RAM. Total 253 memories can be banked which makes the total available banked memory of 253*16KB of banked memory and and 48 KB reserved memory that makes total of 4MB of memory that can be used with microprocessor. 

@@ -144,5 +144,3 @@
 	  ~mo *pc
 	  ~mo wz *hl ovr
 	  ~mo *hl p/s ~wz ovr
-
-Process finished with exit code 0

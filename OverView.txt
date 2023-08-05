@@ -69,9 +69,9 @@ is available through one port at a time whose priority is decoded inside the cpu
 is recommended to select one port at a time for input and output purpose.
 
 ========== Memory banking ==========
-Memory banking is available for 16kb memory of the RAM. Total 8 memories can be banked which
-makes the total available memory of 128kb of banked memory and and 48 kb reserved memory that
-makes total of 176kb memory.
+Memory banking is available for 16KB memory of the RAM. Total 253 memories can be banked which
+makes the total available memory of 253*16KB of banked memory and and 48KB reserved memory that
+makes total of 4MB memory.
 
 INS_SET = \
     {

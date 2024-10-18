@@ -56,15 +56,15 @@
 
 **========== Registers ===========**
 
-Pairs code :^h|^l  001
-             A|M : 00   :: A:100  M:000
-             B|C : 01   :: B:101  C:001
-             D|E : 10   :: D:110  E:010
-             H|L : 11   :: H:111  L:011
+Pairs code : `^h|^l  001`
+1. `A|M : 00   :: A:100  M:000`
+2. `B|C : 01   :: B:101  C:001`
+3. `D|E : 10   :: D:110  E:010`
+4. `H|L : 11   :: H:111  L:011`
   
 Register Pair should be indicated by the low-byte storing register in the pair. if specific register is to be accessed the 2lsb should indicate pair and 1msb should indicate if the register stores high byte or low byte in the pair. M indicates the memory location in RAM indicated by hl pair or immediate 16bits.
 
-  ***Note : Pairs code is provided just in case the user wants to translate the op-code to machine code by hand.***
+  ***Note : Pairs code is provided just in case the user wants to translate the op-code to machine code by hand. Luckily, I have already made a decoder already.***
 
 **========== Input/Output ==========**
 
